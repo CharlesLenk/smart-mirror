@@ -1,2 +1,0 @@
-let tomorrowIoApiKey = '';
-let gpsLocation = '';
