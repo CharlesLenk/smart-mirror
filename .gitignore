@@ -6,3 +6,6 @@
 
 # API keys
 secrets.js
+
+# SCAD Export
+export config.json

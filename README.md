@@ -40,5 +40,11 @@
 7. If you're using the stock raspberry PI display with touchscreen, add the following to `/boot/firmware/config.txt`:
 
     ```
+    dtoverlay=rpi-backlight
     disable_touchscreen=1
+    ```
+    To control the backlight, set a numeric value in the brightness file. For example:
+
+    ```
+    echo 32 | sudo tee /sys/class/backlight/rpi_backlight/brightness
     ```

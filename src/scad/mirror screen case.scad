@@ -31,13 +31,13 @@ pi_cut_corner_d = 35;
 
 pi_case_interior_adjust = 5;
 pi_case_interior_x = pi_cut_x + pi_case_interior_adjust;
-pi_case_interior_y = pi_cut_y + pi_case_interior_adjust;
+pi_case_interior_y = pi_cut_y + 3.5;
 pi_case_interior_corner_d = pi_cut_corner_d + pi_case_interior_adjust;
 
 pi_case_x = pi_case_interior_x + 2 * wall_width;
 pi_case_y = pi_case_interior_y + 2 * wall_width;
 pi_case_d = pi_case_interior_corner_d + 2 * wall_width;
-pi_case_z = 34 + wall_width;
+pi_case_z = 33 + wall_width;
 
 screen_screw_corner_pos = [23.5 + screen_edge_space, 32.25 + screen_edge_space];
 pi_cut_pos = [
@@ -48,20 +48,63 @@ pi_case_pos = [
 ];
 
 screw_holder_d = 8;
-power_cut_y = 69;
-power_cut_z = -15;
+screw_holder_width = screen_screw_x + screw_holder_d;
 
-assembly(true);
-translate([2 * pi_case_x, 0])
-    assembly_brace();
+electronics_snap_bump_depth = 2;
+electronics_snap_bump_width = screen_screw_x/2;
+
+electronics_snap_bump_cut_depth = electronics_snap_bump_depth + 0.3;
+electronics_snap_bump_cut_width = electronics_snap_bump_width + 0.6;
+
+electronics_snap_bump_dedent_depth = electronics_snap_bump_cut_depth + wall_width;
+electronics_snap_bump_dedent_width = electronics_snap_bump_cut_width + 2 * wall_width;
+
+snap_brace_screw_holder_h = 7.5;
+
+assembly(false);
+
+module snap_brace() {
+    height = snap_brace_screw_holder_h;
+    width = screen_screw_x + screw_holder_d;
+
+    difference() {
+        hull() {
+            translate([-width/2, -screw_holder_d/2])
+                rounded_cube(
+                    [width, screw_holder_d, height/2],
+                    d = screw_holder_d, top_d = 0, bottom_d = 0
+                );
+            translate([-width/4, -screw_holder_d/2])
+                rounded_cube(
+                    [width/2, screw_holder_d, height],
+                    d = screw_holder_d, top_d = 0, bottom_d = 0
+                );
+        }
+        reflect([1, 0, 0])
+            translate([screen_screw_x/2, 0, 4])
+                countersink(screen_screw_d, 7);
+    }
+    translate([electronics_snap_bump_width/2, electronics_snap_bump_depth + screw_holder_d/2, snap_brace_screw_holder_h/2])
+        rotate([0, 90, 180])
+            wedge(90, electronics_snap_bump_depth, electronics_snap_bump_width);
+}
 
 module assembly(explode = false) {
     explode_dist = explode ? 30 : 0;
     foam_board_frame();
     translate([0, 0, -explode_dist])
         screen_case();
-    translate([0, 0, -2 * explode_dist])
-        case_back();
+    translate([0, 0, -2 * explode_dist]) {
+        translate(screen_screw_corner_pos + [screen_screw_x/2, 0])
+            rotate([0, 180, 0])
+                snap_brace();
+        translate(screen_screw_corner_pos + [screen_screw_x/2, screen_screw_y])
+            rotate([0, 180, 180])
+                snap_brace();
+    }
+    translate([0, 0, -3 * explode_dist])
+        translate(pi_case_pos - [wall_width, wall_width, 0])
+            electronics_case();
 }
 
 module screw_holder_flange() {
@@ -100,24 +143,6 @@ module case_cut(d = wall_width + 0.2, h = 10, center = true) {
 	length = 15;
 	distance_from_cut = wall_width/2 + pi_case_interior_adjust/2;
 
-	translate([pi_cut_x/2, 0, 0]) {
-		hull() {
-			translate([length/2, -distance_from_cut, 0]) {
-				cylinder(d = d, h = h, center = center);
-			}
-			translate([-length/2, -distance_from_cut, 0]) {
-				cylinder(d = d, h = h, center = center);
-			}
-		}
-		hull() {
-			translate([length/2, pi_cut_y + distance_from_cut, 0]) {
-				cylinder(d = d, h = h, center = center);
-			}
-			translate([-length/2, pi_cut_y + distance_from_cut, 0]) {
-				cylinder(d = d, h = h, center = center);
-			}
-		}
-	}
 	translate([0, pi_cut_y/2, 0]) {
 		hull() {
 			translate([-distance_from_cut, length/2, 0]) {
@@ -248,75 +273,62 @@ module squared_frame2(vector, corner_d, wall_width) {
 	}
 }
 
-module case_back() {
+module electronics_case() {
 	holder_h = 4;
+    power_cut_y = 32;
+    power_cut_z = pi_case_z - 12.5;
 
-	translate([pi_cut_pos[0], pi_cut_pos[1], 0]) {
-		case_cut(d = wall_width, h = wall_width, center = false);
-	}
+    translate(-pi_case_pos)
+        translate([pi_cut_pos[0] + wall_width, pi_cut_pos[1] + wall_width, 0]) {
+            case_cut(d = wall_width, h = wall_width, center = false);
+        }
 
-	difference() {
-		union() {
-			translate(pi_case_pos) {
-				translate([-wall_width, -wall_width, 0]) {
-					rounded_cube(
-					[
-						pi_case_x,
-						pi_case_y,
-						pi_case_z
-					], pi_cut_corner_d, top_d = 0, bottom_d = 0);
-				}
-			}
-			translate([0, 0, -holder_h]) {
-				screen_screw_holes() {
-					hull() {
-						cylinder(d = screw_holder_d, h = holder_h);
-						translate([0, -screw_holder_d, 0]) {
-							cylinder(d = screw_holder_d, h = holder_h);
-						}
-					}
-				}
-			}
-		}
-		hull() {
-			translate([0, power_cut_y + 2, power_cut_z]) {
-				rotate([0, 90, 0]) cylinder(d = 12, h = 20, center = true);
-			}
-			translate([0, power_cut_y - 2, power_cut_z]) {
-				rotate([0, 90, 0]) cylinder(d = 12, h = 20, center = true);
-			}
-		}
-		translate(pi_case_pos) {
-			translate([0, 0, wall_width]) {
-				rounded_cube(
-				[
-					pi_case_interior_x,
-					pi_case_interior_y,
-					pi_case_z
-				], pi_cut_corner_d, top_d = 0, bottom_d = 0);
-			}
-		}
-		translate([0, 0, -holder_h]) {
-			screen_screw_holes() {
-				rotate([180, 0, 0]) countersink(3.1, 6.3);
-			}
-		}
-		intersection() {
-			translate([0, 0, -pi_case_z]) {
-				hexagon_grid(pi_case_x, pi_case_y, 5, 2, 5);
-			}
-			translate(pi_case_pos) {
-				translate([0, 0, -10]) {
-					rounded_cube(
-					[
-						pi_case_interior_x,
-						pi_case_interior_y,
-						pi_case_z
-					], pi_cut_corner_d, top_d = 0, bottom_d = 0);
-				}
-			}
-		}
-	}
+
+    linear_extrude(wall_width)
+        difference() {
+            rounded_square_2([pi_case_x, pi_case_y], r = pi_cut_corner_d/2);
+            hexagon_grid(pi_case_x, pi_case_y, 7, 2.4, 5);
+        }
+
+    difference() {
+        union() {
+            linear_extrude(pi_case_z)
+                difference() {
+                    rounded_square_2([pi_case_x, pi_case_y], r = pi_cut_corner_d/2);
+                    translate([wall_width, wall_width])
+                        rounded_square_2([pi_case_interior_x, pi_case_interior_y], r = pi_cut_corner_d/2 - wall_width);
+                }
+            translate([pi_case_x/2, 0, pi_case_z - snap_brace_screw_holder_h/2])
+                rotate([0, -90, 180])
+                    translate([0, -electronics_snap_bump_dedent_depth, -electronics_snap_bump_dedent_width/2])
+                        wedge(90, electronics_snap_bump_dedent_depth, electronics_snap_bump_dedent_width);
+
+            translate([pi_case_x/2, pi_case_y, pi_case_z - snap_brace_screw_holder_h/2])
+                rotate([0, -90, 0])
+                    translate([0, -electronics_snap_bump_dedent_depth, -electronics_snap_bump_dedent_width/2])
+                        wedge(90, electronics_snap_bump_dedent_depth, electronics_snap_bump_dedent_width);
+        }
+
+        translate([pi_case_x/2, -0.01, pi_case_z - snap_brace_screw_holder_h/2])
+            rotate([0, -90, 180])
+                translate([0, -electronics_snap_bump_cut_depth, -electronics_snap_bump_cut_width/2])
+                    wedge(90, electronics_snap_bump_cut_depth, electronics_snap_bump_cut_width);
+
+        translate([pi_case_x/2, pi_case_y + 0.1, pi_case_z - snap_brace_screw_holder_h/2])
+            rotate([0, -90, 0])
+                translate([0, -electronics_snap_bump_cut_depth, -electronics_snap_bump_cut_width/2])
+                    wedge(90, electronics_snap_bump_cut_depth, electronics_snap_bump_cut_width);
+
+
+        hull() {
+            translate([0, power_cut_y + 2, power_cut_z]) {
+                rotate([0, 90, 0]) cylinder(d = 12, h = 20, center = true);
+            }
+            translate([0, power_cut_y - 2, power_cut_z]) {
+                rotate([0, 90, 0]) cylinder(d = 12, h = 20, center = true);
+            }
+        }
+    }
 }
 
 module cube_hash() {
@@ -429,7 +441,7 @@ module hexagon_grid(x, y, side_size, distance, h) {
         ]) {
             for (i = [0 : yi]) {
                 translate([0, i * (distance + side_size), -0.01]) {
-                    cylinder(d = 1.154 * side_size, h = h + 0.02, $fn = 6);
+                    circle(d = 1.154 * side_size, $fn = 6);
                 }
             }
         }

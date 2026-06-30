@@ -1,16 +1,14 @@
 include <openscad-utilities/common.scad>
 
-$fn = 50;
-
 spacer_horizontal_depth = 6;
 spacer_vertical_depth = 4.5;
 
 screw_tab_depth = 3.5;
 screw_hole_dia = 5;
 
-bracket_v2(spacer_vertical_depth);
+spacer(spacer_vertical_depth);
 
-module bracket_v2(spacer_depth) {
+module spacer(spacer_depth) {
 	bracket_width = 30;
 	screw_tab_height = 18;
 	mid_height = 4;
