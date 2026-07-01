@@ -7,7 +7,8 @@ screen_corner_d = 16;
 
 screen_screw_x = 65.5;
 screen_screw_y = 126;
-screen_screw_d = 3.1;
+screen_screw_d = 3.2;
+screw_head_d = 6.3;
 
 screen_edge_space = 0.05;
 screen_cut_x = screen_x + 2 * screen_edge_space;
@@ -82,7 +83,7 @@ module snap_brace() {
         }
         reflect([1, 0, 0])
             translate([screen_screw_x/2, 0, 4])
-                countersink(screen_screw_d, 7);
+                countersink(screen_screw_d, screw_head_d);
     }
     translate([electronics_snap_bump_width/2, electronics_snap_bump_depth + screw_holder_d/2, snap_brace_screw_holder_h/2])
         rotate([0, 90, 180])
@@ -212,7 +213,9 @@ module screen_case() {
 			}
 		}
 		place_corner_screw_holders() {
-			translate([0, 0, 1]) rotate([180, 0, 0]) countersink(3.1, 6.3);
+			translate([0, 0, 1])
+                rotate([180, 0, 0])
+                    countersink(screen_screw_d, screw_head_d);
 		}
 	}
 }

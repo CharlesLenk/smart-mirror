@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -7,30 +7,30 @@
         <meta name="description" content="Mirror mirror on the wall...">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <script src="js/vendor/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/weather.css">
+
+        <!-- Config (gpsLocation, tomorrowIoApiKey); see README. Loaded first. -->
+        <script src="js/secrets.js"></script>
+
+        <!-- Vendored locally so the mirror needs no internet to render. -->
         <script src="js/vendor/skycons.js"></script>
 
         <script src="js/weatherget.js"></script>
         <script src="js/weather.js"></script>
         <script src="js/main.js"></script>
-        <script src="js/secrets.js"></script>
-
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/weather.css">
-        <link rel="stylesheet" href="css/weathericons.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neucha" type="text/css">
     </head>
     <body id="body">
         <div id="time"></div>
         <div id="date"></div>
-        <div>
+        <div id="current">
             <div id="main-icon"><canvas id="weather-icon" width="180" height="180"></canvas></div>
-            <div>
-                <h2 id="temperature"></h2>
+            <div id="current-text">
+                <div id="temperature"></div>
                 <div id="weatherDynamic"></div>
             </div>
         </div>
         <table id="weatherTable"></table>
+        <div id="status"></div>
     </body>
 </html>

@@ -1,25 +1,46 @@
-html *,
-html *:before,
-html *:after {
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
     box-sizing: inherit;
 }
 
+html,
 body {
-    background-color: #000000;
-    color: #F8F8FF;
-    font: 15px 'Open Sans', "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    height: 100%;
 }
 
-#body {
+body {
+    margin: 0;
+    padding: 0.4em 1em;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #000000;
+    color: #F8F8FF;
+    /* System font stack: no web fonts, so the mirror renders fully offline. */
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+        Arial, sans-serif;
+    font-size: 15px;
+    /* Lay everything out top-to-bottom, pinned to the right edge, no scroll. */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     text-align: right;
-    margin: 0 1.5em 0 0;
+}
+
+canvas {
+    display: block;
 }
 
 #time {
     font-size: 6em;
+    line-height: 1;
 }
 
 #date {
     font-size: 2.5em;
-    margin: -0.3em 0 0 0;
+    margin: -0.2em 0 0 0;
 }
