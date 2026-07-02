@@ -58,7 +58,7 @@ async function refreshWeather() {
         const cached = loadCachedWeather();
         if (cached) {
             renderWeather(cached.weather);
-            setStatus('Offline — showing data from ' + formatStamp(cached.savedAt));
+            setStatus('Offline — showing data from ' + formatAge(cached.savedAt));
         } else {
             renderWeatherError('Weather unavailable');
         }
@@ -83,9 +83,14 @@ function loadCachedWeather() {
     }
 }
 
-function formatStamp(ms) {
-    return new Intl.DateTimeFormat('en', { hour: 'numeric', minute: 'numeric', hour12: true })
-        .format(new Date(ms));
+function formatAge(ms) {
+    const minutes = Math.round((Date.now() - ms) / 60000);
+    if (minutes < 1) return 'just now';
+    if (minutes < 60) return minutes + ' minute' + (minutes === 1 ? '' : 's') + ' ago';
+    const hours = Math.round(minutes / 60);
+    if (hours < 24) return hours + ' hour' + (hours === 1 ? '' : 's') + ' ago';
+    const days = Math.round(hours / 24);
+    return days + ' day' + (days === 1 ? '' : 's') + ' ago';
 }
 
 function setStatus(text) {

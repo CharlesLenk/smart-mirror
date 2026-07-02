@@ -1,6 +1,8 @@
-from datetime import datetime, timedelta, timezone
+import brightness
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
-from brightness import target_brightness
+from brightness import find_backlight_dir, get_sun_times, target_brightness, write_brightness
 
 TZ = timezone.utc
 SUNRISE = datetime(2026, 6, 29, 6, 0, tzinfo=TZ)
@@ -56,27 +58,17 @@ def test_never_exceeds_bounds():
         assert MIN_B <= v <= MAX_B
 
 
-from datetime import date as date_cls
-
-from brightness import get_sun_times
-
-
 def test_get_sun_times_seattle_summer():
     # Seattle: ~47.6062 N, 122.3321 W
     sunrise, sunset = get_sun_times(
-        date_cls(2026, 6, 29), 47.6062, -122.3321, "America/Los_Angeles"
+        date(2026, 6, 29), 47.6062, -122.3321, "America/Los_Angeles"
     )
     assert sunrise.tzinfo is not None
     assert sunset.tzinfo is not None
     assert sunrise < sunset
-    assert sunrise.date() == date_cls(2026, 6, 29)
+    assert sunrise.date() == date(2026, 6, 29)
     # Midsummer Seattle sunrise is very early (before 06:00 local).
     assert sunrise.hour < 6
-
-
-from pathlib import Path
-
-from brightness import find_backlight_dir, write_brightness
 
 
 def test_find_backlight_dir_detects_brightness_file(tmp_path):
@@ -94,9 +86,6 @@ def test_write_brightness_writes_integer(tmp_path):
     (tmp_path / "brightness").write_text("0")
     write_brightness(90, tmp_path)
     assert (tmp_path / "brightness").read_text().strip() == "90"
-
-
-import brightness
 
 
 def test_main_falls_back_to_max_on_error(tmp_path, monkeypatch):

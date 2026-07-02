@@ -4,6 +4,10 @@
 #
 # Safe to re-run: every step checks whether it has already been applied before
 # changing anything, and files it edits are backed up first.
+#
+# Steps it CANNOT do for you (do these manually):
+#   - Install Raspberry Pi OS.
+#   - Rotate the display via Preferences > Control Centre > Screens.
 
 set -eu
 
@@ -196,5 +200,5 @@ fi
 echo
 info "Setup complete."
 echo "  Remaining manual steps:"
-echo "    - Rotate the display: Preferences > Control Centre > Screens"
+echo "    - Rotate the display: Preferences > Control Centre > Screens."
 echo "    - Reboot to apply config.txt and start the mirror: sudo reboot"
