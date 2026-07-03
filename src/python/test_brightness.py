@@ -7,7 +7,7 @@ from brightness import find_backlight_dir, get_sun_times, target_brightness, wri
 TZ = timezone.utc
 SUNRISE = datetime(2026, 6, 29, 6, 0, tzinfo=TZ)
 SUNSET = datetime(2026, 6, 29, 20, 0, tzinfo=TZ)
-MIN_B, MAX_B, FADE_WINDOW = 30, 150, 60  # 60-min window => 30 min each side
+MIN_B, MAX_B, FADE_WINDOW = 30, 180, 60  # 60-min window => 30 min each side
 HALF = timedelta(minutes=FADE_WINDOW // 2)
 
 
@@ -36,11 +36,11 @@ def test_sunrise_window_end_is_max():
 
 
 def test_exact_sunrise_is_midpoint():
-    assert tb(SUNRISE) == (MIN_B + MAX_B) // 2  # 90
+    assert tb(SUNRISE) == 105 # (MIN_B + MAX_B) / 2
 
 
 def test_exact_sunset_is_midpoint():
-    assert tb(SUNSET) == (MIN_B + MAX_B) // 2  # 90
+    assert tb(SUNSET) == 105 # (MIN_B + MAX_B) / 2
 
 
 def test_sunset_window_end_is_min():
@@ -48,8 +48,8 @@ def test_sunset_window_end_is_min():
 
 
 def test_quarter_into_sunrise_window():
-    # 15 min into a 60-min window = 25% of the way from 30 to 150 = 60
-    assert tb(SUNRISE - HALF + timedelta(minutes=15)) == 60
+    # 15 min into a 60-min window = 25% of the way from 30 to 180 = 68
+    assert tb(SUNRISE - HALF + timedelta(minutes=15)) == 68
 
 
 def test_never_exceeds_bounds():
