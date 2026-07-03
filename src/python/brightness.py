@@ -17,8 +17,8 @@ def _cfg(name, default):
     return getattr(_user_config, name, default)
 
 
-LATITUDE = _cfg("LATITUDE", 47.6062)
-LONGITUDE = _cfg("LONGITUDE", -122.3321)
+LATITUDE = _cfg("LATITUDE", 47.62)
+LONGITUDE = _cfg("LONGITUDE", -122.34)
 TIMEZONE = _cfg("TIMEZONE", "America/Los_Angeles")
 MIN_BRIGHTNESS = _cfg("MIN_BRIGHTNESS", 30)
 MAX_BRIGHTNESS = _cfg("MAX_BRIGHTNESS", 150)
