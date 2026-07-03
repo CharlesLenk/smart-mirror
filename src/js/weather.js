@@ -7,6 +7,9 @@
 
 const skycons = new Skycons({ color: 'white' });
 
+const chevronUp = '<svg class="chevron chevron-up" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 11 L8 5 L14 11"/></svg>';
+const chevronDown = '<svg class="chevron chevron-down" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5 L8 11 L14 5"/></svg>';
+
 // Build forecast rows lazily so the table always matches how many days the
 // API returned (rather than a hard-coded count).
 function buildForecastRows(count) {
@@ -31,7 +34,7 @@ function renderWeather(weather) {
     document.getElementById('weatherDynamic').innerHTML =
         '<div>' + weather.currently + '</div>' +
         '<div>' + weather.wind.direction + ' ' + weather.wind.speed + ' ' + weather.units.speed + '</div>' +
-        '<div>&#9650; High ' + weather.high + ' &#9660; Low ' + weather.low + '</div>';
+        '<div>' + chevronUp + ' High ' + weather.high + ' ' + chevronDown + ' Low ' + weather.low + '</div>';
 
     buildForecastRows(weather.forecast.length);
     weather.forecast.forEach((f, i) => {

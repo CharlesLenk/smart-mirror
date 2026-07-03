@@ -84,7 +84,7 @@ test('getWeather normalizes realtime + forecast into the weather object', async 
         ],
     });
 
-    const w = await getWeather('47.6,-122.3', 'KEY');
+    const w = await getWeather('47.6', '-122.3', 'KEY');
 
     assert.equal(w.temp, 72);                  // rounded
     assert.equal(w.currently, 'Thunderstorm'); // display name, not the skycon id
@@ -115,12 +115,12 @@ test('getWeather picks the night icon after sunset', async () => {
         ],
     });
 
-    const w = await getWeather('47.6,-122.3', 'KEY');
+    const w = await getWeather('47.6', '-122.3', 'KEY');
     assert.equal(w.isNight, true);
     assert.equal(w.icon, 'CLEAR_NIGHT');
 });
 
 test('getWeather rejects on a non-OK response', async () => {
     global.fetch = () => Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({}) });
-    await assert.rejects(getWeather('x', 'y'), /Weather request failed: 500/);
+    await assert.rejects(getWeather('x', 'y', 'z'), /Weather request failed: 500/);
 });

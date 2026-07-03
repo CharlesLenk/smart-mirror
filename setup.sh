@@ -56,24 +56,24 @@ apt_install() { # apt_install pkg...
 # ---------- gather configuration ----------
 info "Configuration"
 ask WEATHER_API_KEY "Tomorrow.io API key" ""
-[ -n "$WEATHER_API_KEY" ] || warn "No API key entered; edit src/js/secrets.js later."
-ask GPS_LOCATION "Weather location 'lat,lon'" "47.6061,-122.3328"
-LAT="$(printf '%s' "${GPS_LOCATION%%,*}" | tr -d ' ')"
-LON="$(printf '%s' "${GPS_LOCATION##*,}" | tr -d ' ')"
+[ -n "$WEATHER_API_KEY" ] || warn "No API key entered; edit src/js/config.js later."
+ask LAT "Latitude for weather" "47.6061"
+ask LON "Longitude for weather" "-122.3328"
 DEFAULT_TZ="$(timedatectl show -p Timezone --value 2>/dev/null || echo America/Los_Angeles)"
 ask TIMEZONE "Timezone (IANA name)" "$DEFAULT_TZ"
 
-# ---------- 1. secrets.js ----------
-info "Writing src/js/secrets.js"
-SECRETS="$REPO_DIR/src/js/secrets.js"
-if [ -f "$SECRETS" ] && ! confirm "secrets.js exists — overwrite?" N; then
-    ok "keeping existing secrets.js"
+# ---------- 1. config.js ----------
+info "Writing src/js/config.js"
+CONFIG_JS="$REPO_DIR/src/js/config.js"
+if [ -f "$CONFIG_JS" ] && ! confirm "config.js exists — overwrite?" N; then
+    ok "keeping existing config.js"
 else
-    cat > "$SECRETS" <<EOF
+    cat > "$CONFIG_JS" <<EOF
 let tomorrowIoApiKey = '$WEATHER_API_KEY';
-let gpsLocation = '$GPS_LOCATION'; // Coordinates to show weather for
+let latitude = '$LAT';
+let longitude = '$LON';
 EOF
-    ok "wrote $SECRETS"
+    ok "wrote $CONFIG_JS"
 fi
 
 # ---------- 2. labwc: hide the cursor ----------

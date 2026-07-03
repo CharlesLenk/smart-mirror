@@ -4,10 +4,9 @@
 
 1. Install PI OS (the steps below are for "Trixie").
 2. Clone this project into your home directory.
-3. Create `~/smart-mirror/src/js/secrets.js`:
+3. Copy config.example.js and your your Tomorrow.io API key, and your latitude and longitude.
     ```
-    let tomorrowIoApiKey = 'Your API key';
-    let gpsLocation = '47.6061,-122.3328'; // Update with the coordinates you want weather for
+    cp config.example.js config.js
     ```
 4. Rotate the display in the UI through Preferences > Control Centre > Screens.
 5. Add a keyboard command to hide the mouse pointer to `~/.config/labwc/rc.xml`:

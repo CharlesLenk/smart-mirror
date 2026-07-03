@@ -3,7 +3,7 @@
 /*
  * Orchestration: clock and periodic weather refresh with offline caching.
  *
- * Depends on globals from secrets.js: gpsLocation, tomorrowIoApiKey.
+ * Depends on globals from config.js: latitude, longitude, tomorrowIoApiKey.
  */
 
 const WEATHER_REFRESH_MS = 10 * 60 * 1000;     // 10 minutes
@@ -49,7 +49,7 @@ function startClock() {
 
 async function refreshWeather() {
     try {
-        const weather = await getWeather(gpsLocation, tomorrowIoApiKey);
+        const weather = await getWeather(latitude, longitude, tomorrowIoApiKey);
         cacheWeather(weather);
         renderWeather(weather);
         setStatus('');
