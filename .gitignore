@@ -4,5 +4,14 @@
 # OSX
 .DS_Store
 
-# API keys
-secrets.js
+# Weather config
+config.js
+
+# Brightness config (copy config.example.py -> config.py)
+src/python/config.py
+
+# Python virtualenv
+src/python/.venv/
+
+# SCAD Export
+export config.json
