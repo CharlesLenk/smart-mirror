@@ -50,6 +50,7 @@ pi_case_pos = [
 
 screw_holder_d = 8;
 screw_holder_width = screen_screw_x + screw_holder_d;
+snap_bracket_screw_holder_h = 7.5;
 
 electronics_snap_bump_depth = 2;
 electronics_snap_bump_width = screen_screw_x/2;
@@ -60,12 +61,11 @@ electronics_snap_bump_cut_width = electronics_snap_bump_width + 0.6;
 electronics_snap_bump_dedent_depth = electronics_snap_bump_cut_depth + wall_width;
 electronics_snap_bump_dedent_width = electronics_snap_bump_cut_width + 2 * wall_width;
 
-snap_brace_screw_holder_h = 7.5;
 
-assembly(false);
+assembly(explode = true);
 
-module snap_brace() {
-    height = snap_brace_screw_holder_h;
+module snap_bracket() {
+    height = snap_bracket_screw_holder_h;
     width = screen_screw_x + screw_holder_d;
 
     difference() {
@@ -85,7 +85,7 @@ module snap_brace() {
             translate([screen_screw_x/2, 0, 4])
                 countersink(screen_screw_d, screw_head_d);
     }
-    translate([electronics_snap_bump_width/2, electronics_snap_bump_depth + screw_holder_d/2, snap_brace_screw_holder_h/2])
+    translate([electronics_snap_bump_width/2, electronics_snap_bump_depth + screw_holder_d/2, snap_bracket_screw_holder_h/2])
         rotate([0, 90, 180])
             wedge(90, electronics_snap_bump_depth, electronics_snap_bump_width);
 }
@@ -98,10 +98,10 @@ module assembly(explode = false) {
     translate([0, 0, -2 * explode_dist]) {
         translate(screen_screw_corner_pos + [screen_screw_x/2, 0])
             rotate([0, 180, 0])
-                snap_brace();
+                snap_bracket();
         translate(screen_screw_corner_pos + [screen_screw_x/2, screen_screw_y])
             rotate([0, 180, 180])
-                snap_brace();
+                snap_bracket();
     }
     translate([0, 0, -3 * explode_dist])
         translate(pi_case_pos - [wall_width, wall_width, 0])
@@ -224,7 +224,7 @@ module assembly_brace() {
     difference() {
         translate([-2 * wall_width - wall_space/2, -2 * wall_width - wall_space/2, 0]) {
             translate([-wall_width, -wall_width, 0]) {
-                squared_frame2([
+                squared_frame([
                     screen_case_x + wall_space,
                     screen_case_y + wall_space,
                     cutout_depth],
@@ -236,7 +236,7 @@ module assembly_brace() {
     }
 }
 
-module squared_frame2(vector, corner_d, wall_width) {
+module squared_frame(vector, corner_d, wall_width) {
 	difference() {
 		union() {
 			cube(
@@ -301,27 +301,18 @@ module electronics_case() {
                     translate([wall_width, wall_width])
                         rounded_square_2([pi_case_interior_x, pi_case_interior_y], r = pi_cut_corner_d/2 - wall_width);
                 }
-            translate([pi_case_x/2, 0, pi_case_z - snap_brace_screw_holder_h/2])
-                rotate([0, -90, 180])
-                    translate([0, -electronics_snap_bump_dedent_depth, -electronics_snap_bump_dedent_width/2])
-                        wedge(90, electronics_snap_bump_dedent_depth, electronics_snap_bump_dedent_width);
-
-            translate([pi_case_x/2, pi_case_y, pi_case_z - snap_brace_screw_holder_h/2])
-                rotate([0, -90, 0])
-                    translate([0, -electronics_snap_bump_dedent_depth, -electronics_snap_bump_dedent_width/2])
-                        wedge(90, electronics_snap_bump_dedent_depth, electronics_snap_bump_dedent_width);
+			translate([pi_case_x/2, 0])
+				rotate([0, 0, 180])
+					snap_bump(electronics_snap_bump_dedent_width, electronics_snap_bump_dedent_depth);
+            translate([pi_case_x/2, pi_case_y])
+				snap_bump(electronics_snap_bump_dedent_width, electronics_snap_bump_dedent_depth);
         }
 
-        translate([pi_case_x/2, -0.01, pi_case_z - snap_brace_screw_holder_h/2])
-            rotate([0, -90, 180])
-                translate([0, -electronics_snap_bump_cut_depth, -electronics_snap_bump_cut_width/2])
-                    wedge(90, electronics_snap_bump_cut_depth, electronics_snap_bump_cut_width);
-
-        translate([pi_case_x/2, pi_case_y + 0.1, pi_case_z - snap_brace_screw_holder_h/2])
-            rotate([0, -90, 0])
-                translate([0, -electronics_snap_bump_cut_depth, -electronics_snap_bump_cut_width/2])
-                    wedge(90, electronics_snap_bump_cut_depth, electronics_snap_bump_cut_width);
-
+        translate([pi_case_x/2, -0.01])
+            rotate([0, 0, 180])
+				snap_bump(electronics_snap_bump_cut_width, electronics_snap_bump_cut_depth);
+        translate([pi_case_x/2, pi_case_y + 0.1])
+			snap_bump(electronics_snap_bump_cut_width, electronics_snap_bump_cut_depth);
 
         hull() {
             translate([0, power_cut_y + 2, power_cut_z]) {
@@ -332,6 +323,13 @@ module electronics_case() {
             }
         }
     }
+
+	module snap_bump(length, depth) {
+		translate([0, 0, pi_case_z - snap_bracket_screw_holder_h/2])
+			rotate([0, -90, 0])
+				translate([0, -depth, -length/2])
+					wedge(90, depth, length);
+	}
 }
 
 module cube_hash() {

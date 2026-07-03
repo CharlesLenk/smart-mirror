@@ -11,6 +11,7 @@ cutout_width = cable_diameter - 0.5;
 y = cable_diameter + 12;
 screw_holder_d = screw_head_diameter + 4;
 
+
 cable_clip();
 
 module cable_clip() {
