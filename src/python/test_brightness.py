@@ -60,7 +60,7 @@ def test_never_exceeds_bounds():
 
 def test_get_sun_times_seattle_summer():
     sunrise, sunset = get_sun_times(
-        date(2026, 6, 29), 47.6062, -122.3321, "America/Los_Angeles"
+        date(2026, 6, 29), 47.62, -122.34, "America/Los_Angeles"
     )
     assert sunrise.tzinfo is not None
     assert sunset.tzinfo is not None
@@ -94,7 +94,7 @@ def test_main_falls_back_to_max_on_error(tmp_path, monkeypatch):
     monkeypatch.setattr(brightness, "find_backlight_dir", lambda: tmp_path)
     def boom(*a, **k):
         raise RuntimeError("no sun today")
-    
+
     monkeypatch.setattr(brightness, "get_sun_times", boom)
 
     brightness.main()
