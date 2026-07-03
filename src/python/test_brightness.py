@@ -59,7 +59,6 @@ def test_never_exceeds_bounds():
 
 
 def test_get_sun_times_seattle_summer():
-    # Seattle: ~47.6062 N, 122.3321 W
     sunrise, sunset = get_sun_times(
         date(2026, 6, 29), 47.6062, -122.3321, "America/Los_Angeles"
     )
@@ -67,7 +66,6 @@ def test_get_sun_times_seattle_summer():
     assert sunset.tzinfo is not None
     assert sunrise < sunset
     assert sunrise.date() == date(2026, 6, 29)
-    # Midsummer Seattle sunrise is very early (before 06:00 local).
     assert sunrise.hour < 6
 
 
@@ -91,11 +89,12 @@ def test_write_brightness_writes_integer(tmp_path):
 def test_main_falls_back_to_max_on_error(tmp_path, monkeypatch):
     target = tmp_path / "brightness"
     target.write_text("0")
-    # Backlight is found...
+
+    # Backlight is found but sun-time lookup fails.
     monkeypatch.setattr(brightness, "find_backlight_dir", lambda: tmp_path)
-    # ...but sun-time lookup blows up.
     def boom(*a, **k):
         raise RuntimeError("no sun today")
+    
     monkeypatch.setattr(brightness, "get_sun_times", boom)
 
     brightness.main()
