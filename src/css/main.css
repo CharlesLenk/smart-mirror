@@ -20,7 +20,6 @@ body {
     overflow: hidden;
     background-color: #000000;
     color: #F8F8FF;
-    /* System font stack: no web fonts, so the mirror renders fully offline. */
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
         Arial, sans-serif;
     font-size: 15px;
