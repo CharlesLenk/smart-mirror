@@ -46,17 +46,10 @@ of the steps below.
     instead of leaving a blank screen.
 
 7. If you're using the stock raspberry PI display with touchscreen, add the following to `/boot/firmware/config.txt` to
-disable the touchscreen (behind the mirror, so no point) and enable the backlight configuration:
+disable the touchscreen (behind the mirror, so no point):
 
     ```
     disable_touchscreen=1
-    dtoverlay=rpi-backlight
-    ```
-    A script that will automatically dim the backlight is provided. To set the backlight manually, set a numeric value 
-    in the brightness file. For example:
-
-    ```
-    echo 32 | sudo tee /sys/class/backlight/rpi_backlight/brightness
     ```
 
 ### Auto-dim the display (optional)
@@ -84,11 +77,11 @@ Fades the brightness between day and night levels based on local sunrise/sunset.
     ```
 
     The config file is git-ignored, so your settings survive `git pull`:
-    
-4. Run it every minute. Writing the backlight requires root, so use root's crontab:
-   
+
+4. Run it every minute using chrontab:
+
     ```
-    sudo crontab -e
+    crontab -e
     ```
 
     Add:
@@ -117,8 +110,7 @@ compositor disable and re-enable the display output.
     wlr-randr
     ```
 
-3. Add these lines to your own crontab (`crontab -e` — not root's, since the
-   display belongs to your Wayland session). Replace `DSI-1` with your output
+3. Add these lines to your crontab (`crontab -e`). Replace `DSI-1` with your output
    name if different:
 
     ```

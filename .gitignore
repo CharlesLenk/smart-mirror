@@ -1,17 +1,20 @@
-# WebStorm
+# JetBrains
 .idea
 
 # OSX
 .DS_Store
 
-# Weather config
-config.js
-
-# Brightness config (copy config.example.py -> config.py)
-src/python/config.py
-
 # Python virtualenv
 src/python/.venv/
 
-# SCAD Export
+# Python build files
+__pycache__
+
+# Weather config
+src/js/config.js
+
+# Brightness config
+src/python/config.py
+
+# SCAD Export config
 export config.json
