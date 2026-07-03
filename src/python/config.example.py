@@ -1,8 +1,4 @@
-# Brightness configuration.
-#
-# Copy this file to config.py and edit it:
-#
-#     cp config.example.py config.py
+# Brightness configuration example. See readme.
 #
 # config.py is git-ignored, so your settings survive `git pull`. Any value you
 # omit falls back to the default in brightness.py.

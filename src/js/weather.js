@@ -2,16 +2,15 @@
 
 /*
  * Weather rendering layer. Turns a normalized weather object (from
- * weatherget.js) into DOM. No jQuery.
+ * weatherget.js) into DOM.
  */
 
 const skycons = new Skycons({ color: 'white' });
 
+// Chevrons for high and low temperature.
 const chevronUp = '<svg class="chevron chevron-up" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 11 L8 5 L14 11"/></svg>';
 const chevronDown = '<svg class="chevron chevron-down" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5 L8 11 L14 5"/></svg>';
 
-// Build forecast rows lazily so the table always matches how many days the
-// API returned (rather than a hard-coded count).
 function buildForecastRows(count) {
     const table = document.getElementById('weatherTable');
     let html = '';
