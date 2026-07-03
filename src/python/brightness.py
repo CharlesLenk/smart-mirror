@@ -7,10 +7,6 @@ from zoneinfo import ZoneInfo
 from astral import LocationInfo
 from astral.sun import sun
 
-# ---- Configuration ----
-# Defaults below are overridden by any matching names in config.py (which is
-# git-ignored, so your settings survive `git pull`). Copy config.example.py to
-# config.py to set your location. See README.md.
 try:
     import config as _user_config
 except ImportError:
@@ -21,13 +17,12 @@ def _cfg(name, default):
     return getattr(_user_config, name, default)
 
 
-LATITUDE = _cfg("LATITUDE", 47.6062)              # degrees North (neg = South)
-LONGITUDE = _cfg("LONGITUDE", -122.3321)          # degrees East  (neg = West)
-TIMEZONE = _cfg("TIMEZONE", "America/Los_Angeles")  # IANA timezone name
-MIN_BRIGHTNESS = _cfg("MIN_BRIGHTNESS", 30)       # night
-MAX_BRIGHTNESS = _cfg("MAX_BRIGHTNESS", 150)      # day
-FADE_WINDOW_MINUTES = _cfg("FADE_WINDOW_MINUTES", 60)  # total fade length
-# ------------------------
+LATITUDE = _cfg("LATITUDE", 47.6062)
+LONGITUDE = _cfg("LONGITUDE", -122.3321)
+TIMEZONE = _cfg("TIMEZONE", "America/Los_Angeles")
+MIN_BRIGHTNESS = _cfg("MIN_BRIGHTNESS", 30)
+MAX_BRIGHTNESS = _cfg("MAX_BRIGHTNESS", 150)
+FADE_WINDOW_MINUTES = _cfg("FADE_WINDOW_MINUTES", 60)
 
 
 def target_brightness(now, sunrise, sunset, min_b, max_b, fade_window_minutes):
