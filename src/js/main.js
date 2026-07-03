@@ -39,8 +39,7 @@ function updateDate() {
         new Intl.DateTimeFormat('en', { hour: 'numeric', minute: 'numeric', hour12: true }).format(now);
 }
 
-// Re-align to the minute boundary on every tick: the displayed minute is never
-// stale, and the clock can't drift over a long uptime the way setInterval does.
+// Re-align to the minute on every tick. The displayed minute is never stale, and prevents clock drift
 function startClock() {
     updateDate();
     const msToNextMinute = 60000 - (Date.now() % 60000);
@@ -58,7 +57,7 @@ async function refreshWeather() {
         const cached = loadCachedWeather();
         if (cached) {
             renderWeather(cached.weather);
-            setStatus('Offline — showing data from ' + formatAge(cached.savedAt));
+            setStatus('Weather get failed; Data from ' + formatAge(cached.savedAt));
         } else {
             renderWeatherError('Weather unavailable');
         }
@@ -84,8 +83,7 @@ function loadCachedWeather() {
 }
 
 function formatAge(ms) {
-    const minutes = Math.round((Date.now() - ms) / 60000);
-    if (minutes < 1) return 'just now';
+    const minutes = getMinutesSince(ms);
     if (minutes < 60) return minutes + ' minute' + (minutes === 1 ? '' : 's') + ' ago';
     const hours = Math.round(minutes / 60);
     if (hours < 24) return hours + ' hour' + (hours === 1 ? '' : 's') + ' ago';

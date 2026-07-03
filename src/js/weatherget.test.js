@@ -87,7 +87,7 @@ test('getWeather normalizes realtime + forecast into the weather object', async 
     const w = await getWeather('47.6', '-122.3', 'KEY');
 
     assert.equal(w.temp, 72);                  // rounded
-    assert.equal(w.currently, 'Thunderstorm'); // display name, not the skycon id
+    assert.equal(w.currently, 'Thunderstorm');
     assert.equal(w.icon, 'THUNDER_RAIN');
     assert.equal(w.isNight, false);
     assert.deepEqual(w.units, { temp: 'F', speed: 'mph' });

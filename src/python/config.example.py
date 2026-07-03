@@ -1,11 +1,8 @@
-# Brightness configuration example. See readme.
+# Brightness configuration example. Anything you omit keeps its default. The location defaults to Seattle.
 
 LATITUDE = 47.6062                  # degrees North (negative = South)
 LONGITUDE = -122.3321               # degrees East  (negative = West)
 TIMEZONE = "America/Los_Angeles"    # IANA timezone name
-
-# Optional brightness tuning (0-255):
 # MIN_BRIGHTNESS = 30               # night
 # MAX_BRIGHTNESS = 150              # day
-
-# FADE_WINDOW_MINUTES = 60          # total fade length, centered on sunrise/sunset
+# FADE_WINDOW_MINUTES = 60          # total brightness fade length, centered on sunrise/sunset

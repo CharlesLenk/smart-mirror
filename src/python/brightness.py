@@ -26,11 +26,9 @@ FADE_WINDOW_MINUTES = _cfg("FADE_WINDOW_MINUTES", 60)
 
 
 def target_brightness(now, sunrise, sunset, min_b, max_b, fade_window_minutes):
-    """Brightness for `now`, fading linearly across a window centered on each
-    event: sunrise (min->max) and sunset (max->min). `fade_window_minutes` is
-    the total length of that window, split evenly before and after the event
-    (e.g. 60 => the fade runs from 30 minutes before to 30 minutes after).
-    Clamped to [min_b, max_b]."""
+    """Brightness fades linearly across a window centered on sunrise (min->max) and sunset (max->min).
+    `fade_window_minutes` is the total length of that window, split evenly before and after the event
+    (e.g. 60 => the fade runs from 30 minutes before to 30 minutes after). Clamped to [min_b, max_b]."""
     half = timedelta(minutes=fade_window_minutes / 2)
     sunrise_start, sunrise_end = sunrise - half, sunrise + half
     sunset_start, sunset_end = sunset - half, sunset + half
@@ -85,7 +83,7 @@ def main():
             now, sunrise, sunset,
             MIN_BRIGHTNESS, MAX_BRIGHTNESS, FADE_WINDOW_MINUTES,
         )
-    except Exception as exc:  # noqa: BLE001 - any failure -> safe fallback
+    except Exception as exc:
         print(f"Falling back to max brightness: {exc}", file=sys.stderr)
         value = MAX_BRIGHTNESS
     write_brightness(value, backlight_dir)

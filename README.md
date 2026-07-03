@@ -46,19 +46,23 @@
     dtoverlay=rpi-backlight
     disable_touchscreen=1
     ```
-    To control the backlight, set a numeric value in the brightness file. For example:
+    A script that will automatically dim the backlight is provided. To set the backlight manually, set a numeric value 
+    in the brightness file. For example:
 
     ```
     echo 32 | sudo tee /sys/class/backlight/rpi_backlight/brightness
     ```
 
-## Auto-dim the display (optional)
+### Auto-dim the display (optional)
 
-Fades the brightness between day and night levels based on local
-sunrise/sunset. Full details (permissions, configuration) are in
-`src/python/README.md`.
+Fades the brightness between day and night levels based on local sunrise/sunset.
 
-1. Install the script's dependencies:
+1. Install python
+    ```
+    sudo apt update && sudo apt install -y python3-venv
+    ```
+
+2. Install the script dependencies:
 
     ```
     cd ~/smart-mirror/src/python
@@ -66,23 +70,28 @@ sunrise/sunset. Full details (permissions, configuration) are in
     .venv/bin/pip install -r requirements.txt
     ```
 
-2. Set your location in `config.py` (git-ignored, so it survives `git pull`):
-
+3. Copy `config.example.py` to `config.py`. Then set your settings according to the documentation in `config.py`.
     ```
     cp config.example.py config.py
     ```
+    The config file is git-ignored, so your settings survive `git pull`:
+    
+4. Run it every minute. 
 
-    Then edit `LATITUDE`, `LONGITUDE`, and `TIMEZONE` in `config.py`.
+   Writing the backlight requires root, so use root's crontab:
+    ```
+    sudo crontab -e
+    ```
 
-3. Run it every minute from root's crontab (`sudo crontab -e`). The hours
-   `0,4-23` skip the overnight off window below, so the script never switches
-   the backlight back on while the display is meant to be off:
-
+    Add:
     ```
     * 0,4-23 * * * ~/smart-mirror/src/python/.venv/bin/python ~/smart-mirror/src/python/brightness.py
     ```
+    The hours
+   `0,4-23` skip the overnight off window of 1am-4am, so the script never switches the backlight back on while the
+   display is meant to be off.
 
-## Power the display off overnight (optional)
+### Power the display off overnight (optional)
 
 Fully powers the panel off (not just dims it) between 1am and 4am by having the
 compositor disable and re-enable the display output.

@@ -2,7 +2,7 @@
 
 /*
  * Weather data layer. Fetches current conditions + daily forecast from
- * Tomorrow.io and returns a normalized weather object. No jQuery.
+ * Tomorrow.io and returns a normalized weather object.
  *
  * getWeather(latitude, longitude, apiKey) -> Promise<weather>
  *
@@ -89,8 +89,6 @@ async function getWeather(latitude, longitude, apiKey) {
     const forecastUrl = base + '/forecast?location=' + encodeURIComponent(gpsCoordinate) +
         '&timesteps=1d&units=imperial&apikey=' + encodeURIComponent(apiKey);
 
-    // Fire both together but wait for BOTH before building the result, so
-    // there is no race over which response lands first.
     const [realtime, forecast] = await Promise.all([
         fetchJson(realtimeUrl),
         fetchJson(forecastUrl),
