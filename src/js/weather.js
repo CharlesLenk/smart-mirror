@@ -32,8 +32,10 @@ function renderWeather(weather) {
 
     document.getElementById('weatherDynamic').innerHTML =
         '<div>' + weather.currently + '</div>' +
-        '<div>' + weather.wind.direction + ' ' + weather.wind.speed + ' ' + weather.units.speed + '</div>' +
-        '<div>' + chevronUp + ' High ' + weather.high + ' ' + chevronDown + ' Low ' + weather.low + '</div>';
+        '<div>' + weather.wind.direction + ' ' + weather.wind.speed + ' ' + weather.units.speed + '</div>';
+
+    document.getElementById('current-hi-lo').innerHTML =
+        chevronUp + ' High ' + weather.high + ' ' + chevronDown + ' Low ' + weather.low;
 
     buildForecastRows(weather.forecast.length);
     weather.forecast.forEach((f, i) => {
