@@ -13,6 +13,7 @@ const chevronDown = '<svg class="chevron chevron-down" viewBox="0 0 16 16" aria-
 
 function buildForecastRows(count) {
     const table = document.getElementById('weatherTable');
+    table.querySelectorAll('canvas').forEach((canvas) => skycons.remove(canvas));
     let html = '';
     for (let i = 0; i < count; i++) {
         const name = 'weather-row-' + i + '-';
