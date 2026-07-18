@@ -36,14 +36,14 @@ function renderWeather(weather) {
         '<div>' + weather.wind.direction + ' ' + weather.wind.speed + ' ' + weather.units.speed + '</div>';
 
     document.getElementById('current-hi-lo').innerHTML =
-        chevronUp + ' High ' + weather.high + ' ' + chevronDown + ' Low ' + weather.low;
+        chevronUp + ' High ' + weather.high + '&deg; ' + chevronDown + ' Low ' + weather.low + '&deg;';
 
     buildForecastRows(weather.forecast.length);
     weather.forecast.forEach((f, i) => {
         const name = 'weather-row-' + i + '-';
         document.getElementById(name + 'day').textContent = f.day;
-        document.getElementById(name + 'high').textContent = f.high;
-        document.getElementById(name + 'low').textContent = f.low;
+        document.getElementById(name + 'high').innerHTML = f.high + '&deg;';
+        document.getElementById(name + 'low').innerHTML = f.low + '&deg;';
         skycons.set(name + 'icon-forecast', f.icon);
     });
 
